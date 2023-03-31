@@ -1,0 +1,54 @@
+Putting It All Together: How to Select the Right Design Pattern
+
+With so many patterns and anti-patterns to take into consideration, it will take time to refine your design pattern
+selection process. There are a few steps you can take to choose an appropriate design pattern.
+
+    Think about the interface of each object and how it will interact with other objects. Are you encapsulating the
+    right information in each object, or should you create a new type of object?
+    Consider the specifications for each object and how you will handle each property. What other objects need awareness
+    of this object’s properties? How will you handle updates?
+    Remember the high-level intent of each group of design patterns. If you are designing for object behavior versus how
+    the object is created, review design pattern options in the Behavioral category.
+    After you pick a design, review the design to see if there’s any reason you should pick a different design. Is there
+    something you need to refactor, or a problem that seems messy to handle?
+    Is there anything you want to change without redesigning your code? Can you do that with your current design pattern
+    selection? Or do you need to introduce another pattern? Remember that you can use multiple different design patterns
+    in the same code base.
+
+Design Patterns in Architecture
+
+Design patterns can also be applied to system architectures. We can move “up the stack” from code units to processes and
+systems. Let’s discuss how you could implement a couple of the design patterns you’ve seen applied to code, but within
+the context of system design.
+Using the Proxy Pattern to Implement a Proxy Server
+
+It’s common to use proxy servers to streamline web traffic and protect sensitive data. As it happens, the Proxy pattern
+is a great fit for implementing a proxy server.
+===>>> https://www.codecademy.com/resources/blog/what-is-a-proxy-server/
+
+You may recall that the Proxy pattern protects access to objects by intercepting and redefining operations on the target
+object. That is exactly what you need for implementing a proxy server, which can be used to hide your identity from
+remote servers or modify requests and responses.
+
+As we learned earlier, the pattern can increase the efficiency of requests; one of the advantages is that we can use the
+proxy to cache results and handle requests from multiple users.
+Using the Facade Pattern to Implement Microservices
+
+Microservices are an architectural style that structures an application as a collection of services. In theory,
+microservices make it easier for business units to write their own APIs that can interact with other parts of the code
+base.
+
+You can use the facade pattern to implement interoperability between these isolated services. The facade is used as an
+interface so that the individual pieces do not become dependent or tightly coupled and the clients do not need to know
+about the underlying code implementation of other services.
+Looking Ahead
+
+As you continue on your coding journey, you’ll encounter more design patterns and anti-patterns. In this article, we
+took a high-level look at anti-patterns and three categories of design patterns:
+
+    Creational
+    Behavioral
+    Structural
+
+Within each category, we walked through a couple patterns to gain familiarity with the concepts. After this article, you
+can start to recognize design patterns in code and practice implementing and including them in your code design process.

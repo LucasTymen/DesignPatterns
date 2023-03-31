@@ -1,0 +1,15 @@
+The Structural Category
+
+Structural design patterns handle relationships between objects. They define how objects and classes can be composed to
+provide new functionality to objects or create larger structures. For example, an object can be used in the definition
+of another object to make new functions available, or classes can inherit from super classes.
+
+Structural patterns include:
+
+    Facade
+    Proxy
+    Flyweight
+    Adapter
+    Decorator
+    Composite
+    Bridge

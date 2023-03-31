@@ -6,9 +6,15 @@ Design Patterns in JavaScript
 
 Learn about common design patterns in JavaScript.
 
-As applications become larger, thoughtful code composition gains importance. As you add moving parts, it can be difficult to maintain, read, or reuse code if the relationships between those different parts are not designed with intention. Without thoughtful codebase design, you might spend more time fixing bugs and updating duplicate code rather than writing new features.
+As applications become larger, thoughtful code composition gains importance. As you add moving parts, it can be
+difficult to maintain, read, or reuse code if the relationships between those different parts are not designed with
+intention. Without thoughtful codebase design, you might spend more time fixing bugs and updating duplicate code rather
+than writing new features.
 
-Luckily, a lot of common problems you’ll encounter have already been solved in the form of design patterns. Design patterns are systems for solutions, rather than code you can directly use. Patterns give names and rules for solving types of problems, and the solution is then an implementation of objects and classes to solve the problem. There are even built-in objects in JavaScript that help with implementation of some common design patterns.
+Luckily, a lot of common problems you’ll encounter have already been solved in the form of design patterns. Design
+patterns are systems for solutions, rather than code you can directly use. Patterns give names and rules for solving
+types of problems, and the solution is then an implementation of objects and classes to solve the problem. There are
+even built-in objects in JavaScript that help with implementation of some common design patterns.
 
 Overall, solutions that implement design patterns tend to be:
 
@@ -20,31 +26,46 @@ Overall, solutions that implement design patterns tend to be:
 
 Watch Out for Anti-Patterns
 
-In contrast to design patterns being best practices, anti-patterns describe ineffective solutions to problems that result in bad things happening, such as:
+In contrast to design patterns being best practices, anti-patterns describe ineffective solutions to problems that
+result in bad things happening, such as:
 
     Namespace pollution — unexpected behavior from interactions from different clients
     Increased code complexity
     Code being difficult to understand and update
     Difficulty with testing and debugging code
 
-Luckily, anti-patterns are well documented to help developers from making the same mistakes that have been made in the past.
+Luckily, anti-patterns are well documented to help developers from making the same mistakes that have been made in the
+past.
 
-You’ll notice some “approved” design patterns also make the list as anti-patterns. In those cases, if the end result winds up being a good or bad choice depends on the implementation context. Because of this, it’s important to assess your solution and how it will impact your code base when you are making design decisions. We’ll take a look at how to select the right design pattern later in the article.
+You’ll notice some “approved” design patterns also make the list as anti-patterns. In those cases, if the end result
+winds up being a good or bad choice depends on the implementation context. Because of this, it’s important to assess
+your solution and how it will impact your code base when you are making design decisions. We’ll take a look at how to
+select the right design pattern later in the article.
 
 Some common anti-patterns include:
 
-    God Object: This name is given to an object that does or knows too much. It is an all-knowing and all-encompassing object. While it might seem easier at first to have all of your properties and methods in one place, doing so can cause issues down the line when you go to update and maintain the code base or collaborate with other developers.
-    Big Ball of Mud/ Spaghetti Code: This is when your code lacks any perceivable architecture. It is hard to figure out where code for a specific functionality is located and what other code depends on it.
-    Yo-Yo Problem: If you find yourself moving from class definition to class definition to understand inheritance and what is happening among classes, you are experiencing the yo-yo problem, which is named due to your head yo-yoing across the screen.
-    Singleton: We’ll explore this below as a classic design pattern, but it’s worth noting that if used improperly, the Singleton pattern can take you into anti-pattern territory because of the restrictions it imposes.
+    God Object: This name is given to an object that does or knows too much. It is an all-knowing and all-encompassing
+    object. While it might seem easier at first to have all of your properties and methods in one place, doing so can
+    cause issues down the line when you go to update and maintain the code base or collaborate with other developers.
+    Big Ball of Mud/ Spaghetti Code: This is when your code lacks any perceivable architecture. It is hard to figure out
+    where code for a specific functionality is located and what other code depends on it.
+    Yo-Yo Problem: If you find yourself moving from class definition to class definition to understand inheritance and
+    what is happening among classes, you are experiencing the yo-yo problem, which is named due to your head yo-yoing
+    across the screen.
+    Singleton: We’ll explore this below as a classic design pattern, but it’s worth noting that if used improperly, the
+    Singleton pattern can take you into anti-pattern territory because of the restrictions it imposes.
     Polluting the global namespace (i.e. defining too many variables at the global scope level).
-    Modifying or extending the Object class prototype. All objects in JavaScripts have a Prototype property that can be altered with methods and properties and all new objects inherit from this root Object by default. However, altering it is a huge no-no.
+    Modifying or extending the Object class prototype. All objects in JavaScripts have a Prototype property that can be
+    altered with methods and properties and all new objects inherit from this root Object by default. However, altering
+    it is a huge no-no.
 
 What an Anti-Pattern Looks Like
 
-In the example below of what not to do, Customer objects are all-knowing and have too much responsibility–this code follows the “God Object” anti-pattern.
+In the example below of what not to do, Customer objects are all-knowing and have too much responsibility–this code
+follows the “God Object” anti-pattern.
 
-Let’s look at what is going on in the Customer class that is not working well. This class creates a Customer object with properties about a customer and their transactions.
+Let’s look at what is going on in the Customer class that is not working well. This class creates a Customer object with
+properties about a customer and their transactions.
 */
 class Customer {
     constructor(userId, first, last) {
@@ -67,9 +88,12 @@ class Customer {
 let bilbo = new Customer(1, "Bilbo", "Baggins");
 bilbo.getTotal(); // 1421
 /*
-We’d want to refactor the above code so the Customer objects are only responsible for information directly about the customer, like the customer id, and first and last names. New types of classes — like Transactions, Transaction, and Products — can handle additional information and methods.
+We’d want to refactor the above code so the Customer objects are only responsible for information directly about the
+customer, like the customer id, and first and last names. New types of classes — like Transactions, Transaction, and
+Products — can handle additional information and methods.
 
-Now that we know all about what not to do, let’s learn more about the patterns that you should be using. Design patterns are commonly grouped into a classification scheme that has three purpose-based categories:
+Now that we know all about what not to do, let’s learn more about the patterns that you should be using. Design patterns
+are commonly grouped into a classification scheme that has three purpose-based categories:
 
     Creational
     Structural
@@ -91,12 +115,18 @@ Creational patterns include:
 Let’s take a look at two Creational design patterns: the Factory and Singleton patterns.
 Factory Pattern
 
-Imagine that you want to keep track of your reading list — each book would have a title, author, number of pages, year written, reading status, and more. If you needed to create an object for each book, you would have to write many lines of repetitive code.
+Imagine that you want to keep track of your reading list — each book would have a title, author, number of pages, year
+written, reading status, and more. If you needed to create an object for each book, you would have to write many lines
+of repetitive code.
 
-To speed up the process of instantiating your reading list, you can make use of the Factory Pattern. Functions that use the Factory Pattern use a predefined template to return an object with properties and methods. The arguments are used to construct the object, while the methods are usually part of the template.
+To speed up the process of instantiating your reading list, you can make use of the Factory Pattern. Functions that use
+the Factory Pattern use a predefined template to return an object with properties and methods. The arguments are used to
+construct the object, while the methods are usually part of the template.
 Implementation of the Factory Pattern
 
-In the code example below, the function createBook() takes 3 arguments: title, author, and read. (The third argument is optional.) The function returns an object literal with 3 properties (title, author, and read) and 2 methods (.getDescription() and .readBook()).
+In the code example below, the function createBook() takes 3 arguments: title, author, and read. (The third argument is
+  optional.) The function returns an object literal with 3 properties (title, author, and read) and 2 methods
+  (.getDescription() and .readBook()).
 */
 function createBook(title, author, read = false) {
     return {
@@ -135,23 +165,34 @@ beloved.title = "I can change the property."
 /*
 Singleton Pattern
 
-As the name implies, we use the Singleton design pattern when we need exactly one instance of a class. Often, it’s used with the goal of managing global application state, but without using actual global scope. Singletons act as a shared resource namespace with a single point of access for functions. You might be wondering when you’d only want a single instance of an object. Here are a few real-world use cases:
+As the name implies, we use the Singleton design pattern when we need exactly one instance of a class. Often, it’s used
+with the goal of managing global application state, but without using actual global scope. Singletons act as a shared
+resource namespace with a single point of access for functions. You might be wondering when you’d only want a single
+instance of an object. Here are a few real-world use cases:
 
     Thread pools
     Caches
     Logging options
     Configuration settings
     Browser load time impact of Singleton globally accessible variables vs real global variables (that was a mouth full)
-    Database connections: reuse existing connections instead of creating new ones, which would increase application and database load
+    Database connections: reuse existing connections instead of creating new ones, which would increase application and
+    database load
 
 Note: Many of those options can also be handled with modules.
 
-The single instance restriction is established through the way the class is implemented. A method can be written to check if an instance already exists, and only return a new object if it doesn’t already exist.
+The single instance restriction is established through the way the class is implemented. A method can be written to
+check if an instance already exists, and only return a new object if it doesn’t already exist.
 Implementation of the Singleton Pattern
 
-In the code snippet, we implement a Singleton class called Singleton. The constructor() is critical to the implementation. In the code, we check if an instance property already exists. If not, we set that property. If it does, we return the instance property. There is a method named .getInstance() defined as well — this is not necessary but makes your code easier to reason with.
+In the code snippet, we implement a Singleton class called Singleton. The constructor() is critical to the
+implementation. In the code, we check if an instance property already exists. If not, we set that property. If it does,
+we return the instance property. There is a method named .getInstance() defined as well — this is not necessary but
+makes your code easier to reason with.
 
-When you instantiate your instance of Singleton, you use the new operator when calling Singleton(). Given the code in the constructor() method, you could theoretically always call your single instance as new Singleton() because it will always return your original instance. However, by providing a .getInstance() method, you can instead call it as Singleton.getInstance(), which is easier to understand and clearer in intent.
+When you instantiate your instance of Singleton, you use the new operator when calling Singleton(). Given the code in
+the constructor() method, you could theoretically always call your single instance as new Singleton() because it will
+always return your original instance. However, by providing a .getInstance() method, you can instead call it as
+Singleton.getInstance(), which is easier to understand and clearer in intent.
 */
 class Singleton {
     constructor() {
@@ -171,7 +212,9 @@ console.log(Singleton.getInstance()); // logs "Singleton {}"
 /*
 The Structural Category
 
-Structural design patterns handle relationships between objects. They define how objects and classes can be composed to provide new functionality to objects or create larger structures. For example, an object can be used in the definition of another object to make new functions available, or classes can inherit from super classes.
+Structural design patterns handle relationships between objects. They define how objects and classes can be composed to
+provide new functionality to objects or create larger structures. For example, an object can be used in the definition
+of another object to make new functions available, or classes can inherit from super classes.
 
 Structural patterns include:
 
@@ -185,20 +228,26 @@ Structural patterns include:
 
 Proxy Pattern
 
-The Proxy Pattern protects access to an object by acting as a placeholder that intercepts and redefines the operations of the target object. This pattern is particularly useful for things like network requests, as it can help avoid redundant requests.
+The Proxy Pattern protects access to an object by acting as a placeholder that intercepts and redefines the operations
+of the target object. This pattern is particularly useful for things like network requests, as it can help avoid
+redundant requests.
 
 There is a Proxy object built into ES6 that can be used to implement the proxy pattern. This object has two parameters:
 
     target: the object that is being proxied
     handler: a definition of any custom behavior handled by the proxy object
 
-If you use the Proxy() constructor with an empty handler, it would just behave like the target object. Proxy objects have built-in handler function objects, which are called traps. Traps are used to call the target object.
+If you use the Proxy() constructor with an empty handler, it would just behave like the target object. Proxy objects
+have built-in handler function objects, which are called traps. Traps are used to call the target object.
 
-Proxy objects are used alongside the Reflect object, which has methods with the exact same name as the Proxy object’s traps. The difference is the Reflect methods forward default operations to the target object.
+Proxy objects are used alongside the Reflect object, which has methods with the exact same name as the Proxy object’s
+traps. The difference is the Reflect methods forward default operations to the target object.
 
-In the code example below, the get() trap is used to modify property access of the target object. On the other hand, Reflect.get() is a static method that retrieves properties from the target object.
+In the code example below, the get() trap is used to modify property access of the target object. On the other hand,
+Reflect.get() is a static method that retrieves properties from the target object.
 
-When you run the code below, the proxy will intercept the city1 property and return Montreal, Canada. However, when the key is not city1, it will use Reflect.get() and return the original value, so proxy.city2 returns Mombasa, Kenya.
+When you run the code below, the proxy will intercept the city1 property and return Montreal, Canada. However, when the
+key is not city1, it will use Reflect.get() and return the original value, so proxy.city2 returns Mombasa, Kenya.
 
 You can view a full list of available Proxy traps here.
 */
@@ -224,9 +273,12 @@ console.log(proxy.city2); // Mombasa, Kenya
 /*
 Facade Pattern
 
-The Facade Pattern is a single class that takes all of the complexity of a subsystem, and hides it. It is commonly used in JavaScript libraries and to simplify interactions with APIs. Use this pattern to create an easier interface for end users.
+The Facade Pattern is a single class that takes all of the complexity of a subsystem, and hides it. It is commonly used
+in JavaScript libraries and to simplify interactions with APIs. Use this pattern to create an easier interface for end
+users.
 
-In the pseudo-code example below, the VideoConverter class provides access to the subsystem classes and is meant to direct client requests across the moving parts. The client would only interface with the VideoConverter class.
+In the pseudo-code example below, the VideoConverter class provides access to the subsystem classes and is meant to
+direct client requests across the moving parts. The client would only interface with the VideoConverter class.
 */
 class VideoConverter {
     constructor() {}
@@ -257,7 +309,8 @@ class Compression {
 /*
 The Behavioral Category
 
-Behavioral patterns streamline messages between unrelated objects in your code by delegating how objects can communicate. They encapsulate the communication behavior to decouple messages between senders and receivers.
+Behavioral patterns streamline messages between unrelated objects in your code by delegating how objects can
+communicate. They encapsulate the communication behavior to decouple messages between senders and receivers.
 
 Behavioral Patterns include:
 
@@ -268,12 +321,20 @@ Behavioral Patterns include:
 
 Observer Pattern
 
-On your favorite social media platforms, other users can follow your activity and be notified when you publish new content. In the same vein, with the Observer Pattern, objects can have dependencies that “subscribe” to view changes to another object. The notifications can flow in a one-to-many relationship, i.e. one changing object can notify many other objects.
+On your favorite social media platforms, other users can follow your activity and be notified when you publish new
+content. In the same vein, with the Observer Pattern, objects can have dependencies that “subscribe” to view changes to
+another object. The notifications can flow in a one-to-many relationship, i.e. one changing object can notify many other
+objects.
 Implementation of the Observer Pattern
 
-In the example, a basic model of the notification flow occurs between Account objects, which use the .addToFollowers() and .removeFromFollowers() methods to subscribe other Account objects to its feed activity. In the real-world, you’re more likely to use the Observer pattern across different types of objects to track changes of state, but the example shows how updates can be pushed to other objects.
+In the example, a basic model of the notification flow occurs between Account objects, which use the .addToFollowers()
+and .removeFromFollowers() methods to subscribe other Account objects to its feed activity. In the real-world, you’re
+more likely to use the Observer pattern across different types of objects to track changes of state, but the example
+shows how updates can be pushed to other objects.
 
-Here we create 3 account objects, a, b, and c. The a object uses its .addToFollowers() method to be ‘followed’ by the b and c objects. Then, the a object publishes a new post, “Hello, world”. We can log the b or c object to see the post was added to their feed property.
+Here we create 3 account objects, a, b, and c. The a object uses its .addToFollowers() method to be ‘followed’ by the b
+and c objects. Then, the a object publishes a new post, “Hello, world”. We can log the b or c object to see the post was
+added to their feed property.
 */
 class Account {
     constructor() {
@@ -316,12 +377,20 @@ console.log(b);
 /*
 Mediator Pattern
 
-If you’ve ever picked up a rideshare app to get a ride home, you may recall that you send a request through the app, then the app “mediates” and assigns a driver to pick you up. You’re not directly calling a driver to pick you up. In this same sense, the Mediator Pattern in code acts as a central interface to encapsulate how different parts of your codebase can communicate with each other.
+If you’ve ever picked up a rideshare app to get a ride home, you may recall that you send a request through the app,
+then the app “mediates” and assigns a driver to pick you up. You’re not directly calling a driver to pick you up. In
+this same sense, the Mediator Pattern in code acts as a central interface to encapsulate how different parts of your
+codebase can communicate with each other.
 
-This pattern helps prevent having too many direct relationships between different classes or components and helps disparate components know about changes in application state. As a benefit, it also makes your code more reusable and easier to modify down the line since classes are not tightly coupled.
+This pattern helps prevent having too many direct relationships between different classes or components and helps
+disparate components know about changes in application state. As a benefit, it also makes your code more reusable and
+easier to modify down the line since classes are not tightly coupled.
 Implementation of the Mediator Pattern
 
-In the example below, a Passenger object can send a request through a RideshareApp object, which acts as a mediator between Driver objects and Passenger objects. The interface for the Passenger and Driver objects are simpler than what you’d see in a real-world scenario and do not deal with the complexity of communicating between these two types of objects. In fact, in our example, these two types of objects don’t need to know what instances exist.
+In the example below, a Passenger object can send a request through a RideshareApp object, which acts as a mediator
+between Driver objects and Passenger objects. The interface for the Passenger and Driver objects are simpler than what
+you’d see in a real-world scenario and do not deal with the complexity of communicating between these two types of
+objects. In fact, in our example, these two types of objects don’t need to know what instances exist.
 */
 class Passenger {
     constructor(name) {
@@ -377,38 +446,57 @@ james.sendRequest(rideshareapp);
 /*
 Putting It All Together: How to Select the Right Design Pattern
 
-With so many patterns and anti-patterns to take into consideration, it will take time to refine your design pattern selection process. There are a few steps you can take to choose an appropriate design pattern.
+With so many patterns and anti-patterns to take into consideration, it will take time to refine your design pattern
+selection process. There are a few steps you can take to choose an appropriate design pattern.
 
-    Think about the interface of each object and how it will interact with other objects. Are you encapsulating the right information in each object, or should you create a new type of object?
-    Consider the specifications for each object and how you will handle each property. What other objects need awareness of this object’s properties? How will you handle updates?
-    Remember the high-level intent of each group of design patterns. If you are designing for object behavior versus how the object is created, review design pattern options in the Behavioral category.
-    After you pick a design, review the design to see if there’s any reason you should pick a different design. Is there something you need to refactor, or a problem that seems messy to handle?
-    Is there anything you want to change without redesigning your code? Can you do that with your current design pattern selection? Or do you need to introduce another pattern? Remember that you can use multiple different design patterns in the same code base.
+    Think about the interface of each object and how it will interact with other objects. Are you encapsulating the
+    right information in each object, or should you create a new type of object?
+    Consider the specifications for each object and how you will handle each property. What other objects need awareness
+    of this object’s properties? How will you handle updates?
+    Remember the high-level intent of each group of design patterns. If you are designing for object behavior versus how
+    the object is created, review design pattern options in the Behavioral category.
+    After you pick a design, review the design to see if there’s any reason you should pick a different design. Is there
+    something you need to refactor, or a problem that seems messy to handle?
+    Is there anything you want to change without redesigning your code? Can you do that with your current design pattern
+    selection? Or do you need to introduce another pattern? Remember that you can use multiple different design patterns
+    in the same code base.
 
 Design Patterns in Architecture
 
-Design patterns can also be applied to system architectures. We can move “up the stack” from code units to processes and systems. Let’s discuss how you could implement a couple of the design patterns you’ve seen applied to code, but within the context of system design.
+Design patterns can also be applied to system architectures. We can move “up the stack” from code units to processes and
+systems. Let’s discuss how you could implement a couple of the design patterns you’ve seen applied to code, but within
+the context of system design.
 Using the Proxy Pattern to Implement a Proxy Server
 
-It’s common to use proxy servers to streamline web traffic and protect sensitive data. As it happens, the Proxy pattern is a great fit for implementing a proxy server.
+It’s common to use proxy servers to streamline web traffic and protect sensitive data. As it happens, the Proxy pattern
+is a great fit for implementing a proxy server.
 
-You may recall that the Proxy pattern protects access to objects by intercepting and redefining operations on the target object. That is exactly what you need for implementing a proxy server, which can be used to hide your identity from remote servers or modify requests and responses.
+You may recall that the Proxy pattern protects access to objects by intercepting and redefining operations on the target
+object. That is exactly what you need for implementing a proxy server, which can be used to hide your identity from
+remote servers or modify requests and responses.
 
-As we learned earlier, the pattern can increase the efficiency of requests; one of the advantages is that we can use the proxy to cache results and handle requests from multiple users.
+As we learned earlier, the pattern can increase the efficiency of requests; one of the advantages is that we can use the
+proxy to cache results and handle requests from multiple users.
 Using the Facade Pattern to Implement Microservices
 
-Microservices are an architectural style that structures an application as a collection of services. In theory, microservices make it easier for business units to write their own APIs that can interact with other parts of the code base.
+Microservices are an architectural style that structures an application as a collection of services. In theory,
+microservices make it easier for business units to write their own APIs that can interact with other parts of the code
+base.
 
-You can use the facade pattern to implement interoperability between these isolated services. The facade is used as an interface so that the individual pieces do not become dependent or tightly coupled and the clients do not need to know about the underlying code implementation of other services.
+You can use the facade pattern to implement interoperability between these isolated services. The facade is used as an
+interface so that the individual pieces do not become dependent or tightly coupled and the clients do not need to know
+about the underlying code implementation of other services.
 Looking Ahead
 
-As you continue on your coding journey, you’ll encounter more design patterns and anti-patterns. In this article, we took a high-level look at anti-patterns and three categories of design patterns:
+As you continue on your coding journey, you’ll encounter more design patterns and anti-patterns. In this article, we
+took a high-level look at anti-patterns and three categories of design patterns:
 
     Creational
     Behavioral
     Structural
 
-Within each category, we walked through a couple patterns to gain familiarity with the concepts. After this article, you can start to recognize design patterns in code and practice implementing and including them in your code design process.
+Within each category, we walked through a couple patterns to gain familiarity with the concepts. After this article, you
+can start to recognize design patterns in code and practice implementing and including them in your code design process.
 Free response
 
 Given the following code example, identify what design pattern is being used and what the code does.

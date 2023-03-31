@@ -1,9 +1,12 @@
 /*
 Facade Pattern
 
-The Facade Pattern is a single class that takes all of the complexity of a subsystem, and hides it. It is commonly used in JavaScript libraries and to simplify interactions with APIs. Use this pattern to create an easier interface for end users.
+The Facade Pattern is a single class that takes all of the complexity of a subsystem, and hides it. It is commonly used
+in JavaScript libraries and to simplify interactions with APIs. Use this pattern to create an easier interface for end
+users.
 
-In the pseudo-code example below, the VideoConverter class provides access to the subsystem classes and is meant to direct client requests across the moving parts. The client would only interface with the VideoConverter class.
+In the pseudo-code example below, the VideoConverter class provides access to the subsystem classes and is meant to
+direct client requests across the moving parts. The client would only interface with the VideoConverter class.
 */
 
 class VideoConverter {
